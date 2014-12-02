@@ -1,0 +1,33 @@
+
+result.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+pauseBg
+  rotate: false
+  xy: 1, 52
+  size: 440, 440
+  orig: 440, 440
+  offset: 0, 0
+  index: -1
+continue
+  rotate: false
+  xy: 443, 312
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+restart
+  rotate: false
+  xy: 1, 1
+  size: 134, 49
+  orig: 134, 49
+  offset: 0, 0
+  index: -1
+back
+  rotate: false
+  xy: 443, 263
+  size: 128, 47
+  orig: 128, 47
+  offset: 0, 0
+  index: -1
