@@ -36,7 +36,7 @@ public class Bg extends GameObject {
 		case Constants.STORE_BG:
 			rectangle = new Rectangle(Constants.storeX, Constants.storeY,
 					Constants.storeWidth, Constants.storeHeight);
-			back = atlas.findRegion("storeBg");
+			back = atlas.findRegion("store");
 			break;
 		case Constants.HEART:
 			rectangle = new Rectangle(Constants.heartImgX, Constants.heartImgY,
