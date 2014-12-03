@@ -53,7 +53,8 @@ public class Bubble extends GameObject implements Poolable {
 	public boolean compareTo(Bubble bubble) {
 		if (bubble == null)
 			return false;
-		return this.value == bubble.getValue();
+		return this.value == bubble.getValue() || this.value == 7
+				|| bubble.getValue() == 7;
 	}
 
 	/**
@@ -63,6 +64,10 @@ public class Bubble extends GameObject implements Poolable {
 	 */
 	public boolean autoRemoved() {
 		return tag && waitDuration <= 0;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
 	}
 
 	public int getValue() {
