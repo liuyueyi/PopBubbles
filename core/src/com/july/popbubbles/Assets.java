@@ -7,9 +7,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.july.popbubbles.sprite.Bg;
-import com.july.popbubbles.sprite.Honour;
 import com.july.popbubbles.sprite.BtnTexture;
+import com.july.popbubbles.sprite.Honour;
 
 public class Assets {
 	public static Assets instance = new Assets();
@@ -17,11 +18,11 @@ public class Assets {
 	public TextureAtlas gameAtlas;
 	TextureAtlas resultAtlas;
 	public TextureAtlas effectAtlas;
-	TextureAtlas storeAtlas;
+	public TextureAtlas storeAtlas;
 
-	BitmapFont num;
+	public BitmapFont num;
 	public LabelStyle numStyle;
-	BitmapFont tip;
+	public BitmapFont tip;
 	public LabelStyle tipStyle;
 	BitmapFont result;
 	public LabelStyle resultStyle;
@@ -30,6 +31,7 @@ public class Assets {
 	public BtnTexture[] btn;
 	public Honour[] honours;
 	public TextureRegion[] bubbles;
+	public TextureRegionDrawable btnDrwa;
 
 	public Preferences setPreference; // 保存设置，如音乐，声音的开关状态，最高分
 	public Preferences recordPreference; // 保存游戏状态，如当前分数，上一关分数，关卡，目标分数，豆豆布局
@@ -54,7 +56,7 @@ public class Assets {
 			lastScore = setPreference.getInteger("last", 0);
 		} else
 			lastScore = 0;
-		Gdx.app.log("wzb", "asset last score : " + lastScore);
+		// Gdx.app.log("wzb", "asset last score : " + lastScore);
 
 		num = new BitmapFont(Gdx.files.internal("font/num.fnt"));
 		num.setScale(Constants.wrate, Constants.hrate);
@@ -74,6 +76,8 @@ public class Assets {
 				Gdx.files.internal("img/effect/effect.pack"));
 		storeAtlas = new TextureAtlas(
 				Gdx.files.internal("img/store/store.pack"));
+		// sotre界面button的图片资源
+		btnDrwa = new TextureRegionDrawable(storeAtlas.findRegion("btn"));
 
 		bg = new Bg[5];
 		bg[Constants.MENU_BG] = new Bg(Constants.MENU_BG, menuAtlas);
@@ -109,9 +113,10 @@ public class Assets {
 		btn[Constants.NEW_BTN] = new BtnTexture(Constants.NEW_BTN, resultAtlas);
 
 		bubbles = new TextureRegion[8];
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 7; i++) {
 			bubbles[i] = gameAtlas.findRegion("d", i);
 		}
+		bubbles[7] = gameAtlas.findRegion("d", 8);
 
 		honours = new Honour[4];
 		honours[Constants.HONOUR_GOOD] = new Honour(Constants.HONOUR_GOOD,
