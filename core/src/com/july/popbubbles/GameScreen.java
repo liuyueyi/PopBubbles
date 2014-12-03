@@ -3,8 +3,6 @@ package com.july.popbubbles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -13,14 +11,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.july.popbubbles.dialog.Failure;
 import com.july.popbubbles.dialog.Pause;
+import com.july.popbubbles.dialog.Store;
 import com.july.popbubbles.sprite.BubbleFactory;
 import com.july.popbubbles.sprite.Honour;
 import com.july.popbubbles.sprite.HonourManager;
 import com.july.popbubbles.sprite.PrideLabel;
+import com.july.popbubbles.sprite.PropsManager;
 import com.july.popbubbles.sprite.ScoreTip;
 import com.july.popbubbles.sprite.ToolSprite;
 
-public class GameScreen extends ScreenAdapter implements InputProcessor {
+public class GameScreen extends MyScreen {
 	public MainGame game;
 	int gameState;// 游戏状态
 
@@ -94,6 +94,9 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 		toolSprite.saveState();
 	}
 
+	/**
+	 * 重新开始玩耍本关卡
+	 */
 	public void restart() {
 		init();
 		toolSprite.restart();
@@ -102,24 +105,27 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 	private EventListener listener = new ClickListener() {
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
+			if (gameState == Constants.PASSED) // 显示结束动画时，不接受按钮触发事件
+				return;
+
+			gameState = Constants.PROPS;
 			if (event.getListenerActor() == toolSprite.menu) {
 				// menu btn click
 				if (pause == null)
 					pause = new Pause(GameScreen.this);
 				gameState = Constants.PAUSE;
 				pause.show();
-			} else if (event.getListenerActor() == toolSprite.hammer) {
-				gameState = Constants.FAILED;
-				if (null == failure)
-					failure = new Failure(GameScreen.this,
-							toolSprite.getScore());
-				failure.show();
-			} else if (event.getListenerActor() == toolSprite.bomb) {
-				Gdx.app.log("game", "bomb clicked");
-			} else if (event.getListenerActor() == toolSprite.fresh) {
-				Gdx.app.log("game", "fresh clicked");
 			} else if (event.getListenerActor() == toolSprite.add) {
-				Gdx.app.log("game", "add clicked");
+				gameState = Constants.STORE;
+				Store.store.show(GameScreen.this);
+			} else if (event.getListenerActor() == toolSprite.hammer) {
+				PropsManager.manager.show(Constants.HAMMER_BTN);
+			} else if (event.getListenerActor() == toolSprite.bomb) {
+				PropsManager.manager.show(Constants.BOMB_BTN);
+			} else if (event.getListenerActor() == toolSprite.color) {
+				PropsManager.manager.show(Constants.COLOR_BTN);
+			} else if (event.getListenerActor() == toolSprite.fresh) {
+				PropsManager.manager.show(Constants.FRESH_BTN);
 			}
 		}
 	};
@@ -127,7 +133,8 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 	/**
 	 * 设置gamescreen监听input event
 	 */
-	public void setInput() {
+	@Override
+	public void setInputProcessor() {
 		Gdx.input.setInputProcessor(mult);
 		gameState = Constants.RUN;
 	}
@@ -153,6 +160,15 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 		case Constants.FAILED:
 			failure.draw(batch);
 			return;
+		case Constants.STORE:
+			Store.store.draw(batch);
+			return;
+		case Constants.PROPS:
+			PropsManager.manager.draw(batch, delta);
+			if (PropsManager.manager.isOver()) {
+				gameState = Constants.RUN;
+				BubbleFactory.instance.removeBubblesByProps();
+			}
 		}
 
 		if (removeCount > 0) {
@@ -200,10 +216,10 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 		case Constants.FAILED:
 			System.out.println("game screen init");
 			toolSprite.init();
-//			Assets.instance.lastScore = 0;
+			// Assets.instance.lastScore = 0;
 		case Constants.PASSED:
 			if (!toolSprite.updateLevel()) {
-//				Assets.instance.lastScore = 0;
+				// Assets.instance.lastScore = 0;
 				toolSprite.init();
 			}
 			BubbleFactory.instance.init();
@@ -227,12 +243,6 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
 		if (keycode == Keys.BACK || keycode == Keys.A) {
@@ -246,27 +256,27 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
 		if (removeCount > 0) // 表示还处于消灭豆子的动画之中
 			return false;
 
+		if (gameState == Constants.PROPS
+				&& PropsManager.manager.type == Constants.FRESH_BTN) {
+			PropsManager.manager.act(0, 0);
+			return true;
+		}
+
 		int row = (int) ((Constants.height - screenY) / Constants.bubbleHeight);
 		int column = (int) (screenX / Constants.bubbleWidth);
 		if (row >= 10)
 			return false;
+
+		if (gameState == Constants.PROPS
+				&& BubbleFactory.instance.containBubble(row, column)) {
+			PropsManager.manager.act(row, column);
+			return true;
+		}
 
 		if (BubbleFactory.instance.clicked(row, column)) { // 表示成功消除豆豆
 			prefValue = 5;
@@ -277,23 +287,4 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 		}
 		return true;
 	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
