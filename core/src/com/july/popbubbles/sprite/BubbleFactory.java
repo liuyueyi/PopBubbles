@@ -51,18 +51,19 @@ public class BubbleFactory {
 		}
 		Assets.instance.recordPreference.putString("array",
 				bubbleValueBuffer.toString()).flush();
-//		Gdx.app.log("wzb", "save record" + bubbleValueBuffer.toString());
+		// Gdx.app.log("wzb", "save record" + bubbleValueBuffer.toString());
 	}
 
 	public void loadState() {
-		//System.out.println("load stat " + Assets.instance.recordPreference.getBoolean("ifLoad", false));
+		// System.out.println("load stat " +
+		// Assets.instance.recordPreference.getBoolean("ifLoad", false));
 		if (!Assets.instance.recordPreference.getBoolean("ifLoad", false)) {
 			init();
 			return;
 		}
 
 		String array = Assets.instance.recordPreference.getString("array", "");
-//		System.out.println(array);
+		// System.out.println(array);
 		if (array.equals("")) {
 			init();
 			return;
@@ -122,14 +123,126 @@ public class BubbleFactory {
 		return true;
 	}
 
+	/**
+	 * 判断bubbles[row][column] 是否为空
+	 * 
+	 * @param row
+	 * @param column
+	 * @return
+	 */
+	public boolean containBubble(int row, int column) {
+		return bubbles[row][column] != null;
+	}
+
+	// ********************************************************
+	// 使用道具后的豆豆消灭逻辑
+	/**
+	 * 标记豆豆立即消灭
+	 * 
+	 * @param row
+	 * @param column
+	 */
+	private boolean tagBubble(int row, int column) {
+		if (row < 0 || row > 9 || column < 0 || column > 9
+				|| bubbles[row][column] == null)
+			return false;
+		bubbles[row][column].tag = true;
+		bubbles[row][column].waitDuration = 0;
+		return true;
+	}
+
+	private void tagThreeRowBubbles(int row, int column) {
+		int count = 2;
+		if (tagBubble(row - 1, column))
+			count = 3;
+
+		if (!tagBubble(row, column))
+			return;
+
+		if (!tagBubble(row + 1, column))
+			return;
+
+		for (int i = row + 2; i < 10; i++) {
+			if (bubbles[i][column] == null)
+				break;
+			bubbles[i][column].addMoveDownAction(10, 0, count);
+			Bubble tmp = bubbles[i][column];
+			bubbles[i][column] = bubbles[i - count][column];
+			bubbles[i - count][column] = tmp;
+		}
+	}
+
+	private void bombNineBubbles(int row, int column) {
+		tagThreeRowBubbles(row, column);
+		tagThreeRowBubbles(row, column - 1);
+		tagThreeRowBubbles(row, column + 1);
+	}
+
+	private void hammerBubble(int row, int column) {
+		tagBubble(row, column);
+		for (int i = row + 1; i < 10; i++) {
+			if (bubbles[i][column] == null)
+				break;
+			bubbles[i][column].addMoveDownAction(10, 0, 1);
+			Bubble tmp = bubbles[i][column];
+			bubbles[i][column] = bubbles[i - 1][column];
+			bubbles[i - 1][column] = tmp;
+		}
+	}
+
+	private boolean moveLeftAfterProps = false; // 一个用于使用道具后，判断剩下的豆豆是否自动左移动的标记，true表示左移
+
+	public void freshBubbles() {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				if (bubbles[i][j] != null)
+					bubbles[i][j].setValue((int) (Math.random() * 5));
+			}
+		}
+		preJudge = true;
+	}
+
+	public void removeBubblesByProps() {
+		switch (PropsManager.manager.type) {
+		case Constants.COLOR_BTN:
+			bubbles[PropsManager.manager.row][PropsManager.manager.column]
+					.setValue(7);
+			return;
+		case Constants.HAMMER_BTN:
+			hammerBubble(PropsManager.manager.row, PropsManager.manager.column);
+			moveLeftAfterProps = true;
+			break;
+		case Constants.BOMB_BTN:
+			bombNineBubbles(PropsManager.manager.row,
+					PropsManager.manager.column);
+			moveLeftAfterProps = true;
+			break;
+		}
+	}
+
+	// 道具消灭豆豆逻辑结束
+	// ********************************************************************************
+
+	/**
+	 * bubbles[row][column]被点击,若存在可以消除的豆豆时，标记出来，并稍后自动清除可消灭的豆豆
+	 * 
+	 * @param row
+	 * @param column
+	 * @return true表示可以消除豆豆
+	 */
 	public boolean clicked(int row, int column) {
 		// Gdx.app.log("factory", "row " + row + " column " + column);
+		if (!containBubble(row, column))
+			return false;
+
+		// clear score object
 		for (ScoreTip tip : scoreArray) {
 			tip.clear();
 			scoreTipPools.free(tip);
 		}
 		scoreArray.clear();
-		if (bubbles[row][column] != null && judge(row, column)) {
+
+		if (judge(row, column)) {
 			autoRemoveBubbles();
 			prefTipScore = 5;
 			return true;
@@ -198,11 +311,12 @@ public class BubbleFactory {
 				if (bubbles[r][c] == null)
 					continue;
 				if (bubbles[r][c].tag) { // 记录消除的总个数和当前列的个数
-					wait += 2;
 					bubbles[r][c].waitDuration = wait;
+					wait += 6;
 					count++;
 				} else if (count > 0) { // 添加移动动画，设置等待时间，交换在数组中的位置
-					bubbles[r][c].addMoveDownAction(10, removeCount * 2, count);
+					bubbles[r][c].addMoveDownAction(10, (removeCount) * 6,
+							count);
 					Bubble tmp = bubbles[r - count][c];
 					bubbles[r - count][c] = bubbles[r][c];
 					bubbles[r][c] = tmp;
@@ -300,6 +414,11 @@ public class BubbleFactory {
 					bubbles[i][j].rectangle.x, bubbles[i][j].rectangle.y);
 			bubblePools.free(bubbles[i][j]);
 			bubbles[i][j] = null;
+
+			if (moveLeftAfterProps) {
+				autoMoveLeft();
+				moveLeftAfterProps = false;
+			}
 		}
 	}
 
