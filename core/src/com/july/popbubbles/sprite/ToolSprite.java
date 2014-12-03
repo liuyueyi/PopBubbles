@@ -46,6 +46,9 @@ public class ToolSprite extends Group {
 		hammer = new BtnSprite(Constants.HAMMER_BTN, 0);
 		addActor(hammer);
 
+		color = new BtnSprite(Constants.COLOR_BTN, 0);
+		addActor(color);
+
 		fresh = new BtnSprite(Constants.FRESH_BTN, 0);
 		addActor(fresh);
 
@@ -92,7 +95,7 @@ public class ToolSprite extends Group {
 
 		tip = new Label("", Assets.instance.numStyle);
 		tip.setColor(Color.BLACK);
-		tip.setBounds(0, Constants.width * 1.05f, Constants.width,
+		tip.setBounds(0, Constants.width * 1.08f, Constants.width,
 				score.getHeight());
 		tip.setAlignment(Align.center);
 		addActor(tip);
@@ -200,6 +203,7 @@ public class ToolSprite extends Group {
 		bomb.addListener(listener);
 		fresh.addListener(listener);
 		hammer.addListener(listener);
+		color.addListener(listener);
 		add.addListener(listener);
 		return true;
 	}
