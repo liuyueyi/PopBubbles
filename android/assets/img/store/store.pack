@@ -3,45 +3,24 @@ store.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-storeBg
+store
   rotate: false
-  xy: 1, 1
-  size: 344, 254
-  orig: 344, 254
-  offset: 0, 0
-  index: -1
-storeItem
-  rotate: false
-  xy: 347, 219
-  size: 273, 36
-  orig: 273, 36
-  offset: 0, 0
-  index: -1
-storeBgTitle
-  rotate: false
-  xy: 347, 143
-  size: 220, 74
-  orig: 220, 74
+  xy: 1, 43
+  size: 344, 300
+  orig: 344, 300
   offset: 0, 0
   index: -1
 btn
   rotate: false
-  xy: 347, 101
+  xy: 1, 1
   size: 110, 40
   orig: 110, 40
   offset: 0, 0
   index: -1
 Common_Close
   rotate: false
-  xy: 569, 170
+  xy: 347, 296
   size: 47, 47
   orig: 47, 47
-  offset: 0, 0
-  index: -1
-Main_Life
-  rotate: false
-  xy: 347, 56
-  size: 47, 43
-  orig: 47, 43
   offset: 0, 0
   index: -1
