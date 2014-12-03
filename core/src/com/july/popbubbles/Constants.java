@@ -8,6 +8,8 @@ public class Constants {
 	public final static int PAUSE = 1;
 	public final static int PASSED = 2; // 表示本关结束
 	public final static int FAILED = 3; // 表示正式显示失败
+	public final static int PROPS = 4; // 使用道具状态
+	public final static int STORE = 5; // 商店
 
 	public final static int MENU_BG = 0;
 	public final static int GMAE_BG = 1;
@@ -28,7 +30,7 @@ public class Constants {
 
 	// store constants
 	public final static float storeWidth = 0.8f * width;
-	public final static float storeHeight = storeWidth * 254 / 344;
+	public final static float storeHeight = storeWidth * 300 / 344;
 	public final static float storeX = resultX;
 	public final static float storeY = (height - storeHeight) / 2;
 
@@ -62,7 +64,7 @@ public class Constants {
 	public final static float courseBtnY = startBtnY - 0.8f * btnHeight;
 	public final static float musicBtnY = courseBtnY - 1.4f * btnHeight;
 	public final static float soundBtnY = musicBtnY - 1.4f * btnHeight;
-	public final static float toolBtnY = height - 2.8f * btnHeight;
+	public final static float toolBtnY = height - 2.9f * btnHeight;
 	public final static float freshBtnX = width - btnWidth - 5 * wrate;
 	public final static float colorBtnX = freshBtnX - btnWidth - 5 * wrate;
 	public final static float hammerBtnX = colorBtnX - btnWidth - 5 * wrate;
