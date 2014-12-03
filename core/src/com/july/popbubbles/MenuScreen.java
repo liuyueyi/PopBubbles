@@ -3,8 +3,6 @@ package com.july.popbubbles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -12,9 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.july.popbubbles.dialog.Store;
 import com.july.popbubbles.sprite.BtnSprite;
 
-public class MenuScreen extends ScreenAdapter implements InputProcessor {
+public class MenuScreen extends MyScreen {
 	MainGame game;
 
 	SpriteBatch batch;
@@ -27,6 +26,8 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	Image soundBtn;
 	Image storeBtn;
 
+	boolean showStore;
+
 	public MenuScreen(MainGame game) {
 		this.game = game;
 
@@ -35,6 +36,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 		mul = new InputMultiplexer();
 		mul.addProcessor(this);
 		mul.addProcessor(stage);
+		showStore = false;
 		Gdx.input.setInputProcessor(mul);
 		Gdx.input.setCatchBackKey(true);
 	}
@@ -63,9 +65,17 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 					Assets.instance.soundOn = true;
 				}
 			} else if (event.getListenerActor() == storeBtn) {
+				showStore = true;
+				Store.store.show(MenuScreen.this);
 			}
 		}
 	};
+
+	@Override
+	public void setInputProcessor() {
+		showStore = false;
+		Gdx.input.setInputProcessor(mul);
+	}
 
 	@Override
 	public void show() {
@@ -107,6 +117,9 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 
 		stage.draw();
 		stage.act();
+
+		if (showStore)
+			Store.store.draw(batch);
 	}
 
 	@Override
@@ -117,55 +130,14 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
 		if (keycode == Keys.BACK || keycode == Keys.A) {
 			// exit game
 			Gdx.app.log("wzb", "exit");
+			Gdx.app.exit();
 			return true;
 		}
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }
