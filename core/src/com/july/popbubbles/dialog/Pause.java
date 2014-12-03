@@ -47,7 +47,7 @@ public class Pause {
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
 			if (event.getListenerActor() == continueBtn) {
-				gameScreen.setInput();
+				gameScreen.setInputProcessor();
 			} else if (event.getListenerActor() == backBtn) { // 返回菜单，要求记录当前状态
 //				gameScreen.saveState();
 				gameScreen.game.setScreen(new MenuScreen(gameScreen.game));

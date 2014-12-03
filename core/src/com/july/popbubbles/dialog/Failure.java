@@ -67,7 +67,7 @@ public class Failure {
 				gameScreen.game.setScreen(new GameScreen(gameScreen.game));
 				gameScreen.dispose();
 			} else if (event.getListenerActor() == retry) {
-				gameScreen.setInput();
+				gameScreen.setInputProcessor();
 				gameScreen.restart();
 			}
 		}
@@ -97,7 +97,7 @@ public class Failure {
 			retry.setText((int) time + "sºó¼ÌÐø");
 			if (time < 1) {
 				show = false;
-				gameScreen.setInput();
+				gameScreen.setInputProcessor();
 				gameScreen.restart();
 			}
 		}
