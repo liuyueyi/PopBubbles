@@ -28,6 +28,7 @@ public class GameScreen extends MyScreen {
 	Stage gameStage;
 	SpriteBatch batch;
 
+	Store store;
 	Pause pause;
 	Failure failure;
 	ToolSprite toolSprite;
@@ -108,6 +109,8 @@ public class GameScreen extends MyScreen {
 			if (gameState == Constants.PASSED) // 显示结束动画时，不接受按钮触发事件
 				return;
 
+			MusicManager.manager.playSound(MusicManager.BUTTON);
+
 			gameState = Constants.PROPS;
 			if (event.getListenerActor() == toolSprite.menu) {
 				// menu btn click
@@ -116,8 +119,10 @@ public class GameScreen extends MyScreen {
 				gameState = Constants.PAUSE;
 				pause.show();
 			} else if (event.getListenerActor() == toolSprite.add) {
+				if(store == null)
+					store = new Store();
 				gameState = Constants.STORE;
-				Store.store.show(GameScreen.this);
+				store.show(GameScreen.this);
 			} else if (event.getListenerActor() == toolSprite.hammer) {
 				PropsManager.manager.show(Constants.HAMMER_BTN);
 			} else if (event.getListenerActor() == toolSprite.bomb) {
@@ -161,7 +166,7 @@ public class GameScreen extends MyScreen {
 			failure.draw(batch);
 			return;
 		case Constants.STORE:
-			Store.store.draw(batch);
+			store.draw(batch);
 			return;
 		case Constants.PROPS:
 			PropsManager.manager.draw(batch, delta);
@@ -182,6 +187,8 @@ public class GameScreen extends MyScreen {
 		} else if (gameState == Constants.RUN
 				&& BubbleFactory.instance.ifOver()) {
 			// 结束
+			if (toolSprite.levelUpSucceed())
+				MusicManager.manager.playSound(MusicManager.LEVELUP);
 			gameState = Constants.PASSED;
 			time = BubbleFactory.instance.removeMantain();
 			toolSprite.updateScore(prideLabel.setText(time / 2));
@@ -223,6 +230,7 @@ public class GameScreen extends MyScreen {
 				toolSprite.init();
 			}
 			BubbleFactory.instance.init();
+		case Constants.PROPS:
 		case Constants.PAUSE:
 		case Constants.RUN:
 			Assets.instance.save();
@@ -245,7 +253,13 @@ public class GameScreen extends MyScreen {
 	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
+		MusicManager.manager.playSound(MusicManager.BUTTON);
+
 		if (keycode == Keys.BACK || keycode == Keys.A) {
+//			if (gameState == Constants.PAUSE || gameState == Constants.STORE) {
+//				setInputProcessor();
+//				return false;
+//			}
 			// return to menu
 			if (pause == null)
 				pause = new Pause(GameScreen.this);
@@ -261,19 +275,14 @@ public class GameScreen extends MyScreen {
 		if (removeCount > 0) // 表示还处于消灭豆子的动画之中
 			return false;
 
-		if (gameState == Constants.PROPS
-				&& PropsManager.manager.type == Constants.FRESH_BTN) {
-			PropsManager.manager.act(0, 0);
-			return true;
-		}
-
 		int row = (int) ((Constants.height - screenY) / Constants.bubbleHeight);
 		int column = (int) (screenX / Constants.bubbleWidth);
 		if (row >= 10)
 			return false;
 
 		if (gameState == Constants.PROPS
-				&& BubbleFactory.instance.containBubble(row, column)) {
+				&& (PropsManager.manager.type == Constants.FRESH_BTN || BubbleFactory.instance
+						.containBubble(row, column))) {
 			PropsManager.manager.act(row, column);
 			return true;
 		}
@@ -284,6 +293,8 @@ public class GameScreen extends MyScreen {
 			removeCount = BubbleFactory.instance.removeCount;
 			toolSprite.updateTip(removeCount);
 			HonourManager.manager.show(removeCount);
+		} else {
+			// MusicManager.manager.playSound(MusicManager.SELECT);
 		}
 		return true;
 	}

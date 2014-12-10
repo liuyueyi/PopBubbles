@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import com.july.popbubbles.MusicManager;
 
 public class BubbleEffectManager {
 	public static BubbleEffectManager manager = new BubbleEffectManager();
@@ -29,6 +30,7 @@ public class BubbleEffectManager {
 	}
 
 	public void show(int value, float x, float y) {
+		MusicManager.manager.playSound(MusicManager.POP);
 		for (int i = 0; i < 6; i++) {
 			BubbleEffect bubble = bubbleEffectPool.obtain();
 			bubble.init(value, x, y);

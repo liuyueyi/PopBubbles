@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,7 +27,11 @@ public class MenuScreen extends MyScreen {
 	Image soundBtn;
 	Image storeBtn;
 
+	Store store;
+	
 	boolean showStore;
+	boolean showHelp;
+	TextureRegion help;
 
 	public MenuScreen(MainGame game) {
 		this.game = game;
@@ -37,6 +42,7 @@ public class MenuScreen extends MyScreen {
 		mul.addProcessor(this);
 		mul.addProcessor(stage);
 		showStore = false;
+		showHelp = false;
 		Gdx.input.setInputProcessor(mul);
 		Gdx.input.setCatchBackKey(true);
 	}
@@ -44,29 +50,40 @@ public class MenuScreen extends MyScreen {
 	EventListener btnClickListener = new ClickListener() {
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
+			MusicManager.manager.playSound(MusicManager.BUTTON);
+
 			if (event.getListenerActor() == startBtn) {
 				dispose();
 				game.setScreen(new GameScreen(game));
 			} else if (event.getListenerActor() == courseBtn) {
+				showHelp = true;
+				if (help == null) {
+					help = Assets.instance.menuAtlas.findRegion("help");
+				}
 			} else if (event.getListenerActor() == musicBtn) {
 				if (Assets.instance.musicOn) {
 					musicBtn.setDrawable(Assets.instance.btn[Constants.MUSIC_BTN].btn[1]);
-					Assets.instance.musicOn = false;
+					MusicManager.manager.stopMusic();
 				} else {
 					musicBtn.setDrawable(Assets.instance.btn[Constants.MUSIC_BTN].btn[0]);
 					Assets.instance.musicOn = true;
+					MusicManager.manager.playMusic();
 				}
 			} else if (event.getListenerActor() == soundBtn) {
 				if (Assets.instance.soundOn) {
+					System.out.println("sound off");
 					soundBtn.setDrawable(Assets.instance.btn[Constants.SOUND_BTN].btn[1]);
-					Assets.instance.soundOn = false;
+					MusicManager.manager.stopSound();
 				} else {
+					System.out.println("sound on");
 					soundBtn.setDrawable(Assets.instance.btn[Constants.SOUND_BTN].btn[0]);
 					Assets.instance.soundOn = true;
 				}
 			} else if (event.getListenerActor() == storeBtn) {
+				if(store == null)
+					store = new Store();
 				showStore = true;
-				Store.store.show(MenuScreen.this);
+				store.show(MenuScreen.this);
 			}
 		}
 	};
@@ -117,9 +134,14 @@ public class MenuScreen extends MyScreen {
 
 		stage.draw();
 		stage.act();
-
 		if (showStore)
-			Store.store.draw(batch);
+			store.draw(batch);
+
+		if (showHelp) {
+			batch.begin();
+			batch.draw(help, 0, 0, Constants.width, Constants.height);
+			batch.end();
+		}
 	}
 
 	@Override
@@ -133,9 +155,28 @@ public class MenuScreen extends MyScreen {
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
 		if (keycode == Keys.BACK || keycode == Keys.A) {
+			if (showHelp) {
+				showHelp = false;
+				return false;
+			}
+
+			if (showStore) {
+				showStore = false;
+				return false;
+			}
+
 			// exit game
-			Gdx.app.log("wzb", "exit");
-			Gdx.app.exit();
+			game.event.notify(game, Constants.EXIT);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		if (showHelp) {
+			showHelp = false;
 			return true;
 		}
 		return false;

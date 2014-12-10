@@ -32,6 +32,7 @@ public class Assets {
 	public Honour[] honours;
 	public TextureRegion[] bubbles;
 	public TextureRegionDrawable btnDrwa;
+	public TextureRegionDrawable btnDrwaOff;
 
 	public Preferences setPreference; // 保存设置，如音乐，声音的开关状态，最高分
 	public Preferences recordPreference; // 保存游戏状态，如当前分数，上一关分数，关卡，目标分数，豆豆布局
@@ -50,6 +51,8 @@ public class Assets {
 		setPreference = Gdx.app.getPreferences("set");
 		soundOn = setPreference.getBoolean("soundOn", true);
 		musicOn = setPreference.getBoolean("musicOn", true);
+		Gdx.app.log("wzb", "asset soundon : " + soundOn + " music on "
+				+ musicOn);
 		bestScore = setPreference.getInteger("best", 0);
 		if (recordPreference.getBoolean("ifLoad", false)) {
 			Gdx.app.log("wzb", "asset load last score : ");
@@ -77,7 +80,8 @@ public class Assets {
 		storeAtlas = new TextureAtlas(
 				Gdx.files.internal("img/store/store.pack"));
 		// sotre界面button的图片资源
-		btnDrwa = new TextureRegionDrawable(storeAtlas.findRegion("btn"));
+		btnDrwa = new TextureRegionDrawable(storeAtlas.findRegion("btn_on"));
+		btnDrwaOff = new TextureRegionDrawable(storeAtlas.findRegion("btn_off"));
 
 		bg = new Bg[5];
 		bg[Constants.MENU_BG] = new Bg(Constants.MENU_BG, menuAtlas);

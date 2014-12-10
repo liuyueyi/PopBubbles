@@ -2,14 +2,17 @@ package com.july.popbubbles.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.july.popbubbles.Assets;
 import com.july.popbubbles.Constants;
+import com.july.popbubbles.MusicManager;
 
 public class ToolSprite extends Group {
 	Label score;
@@ -24,6 +27,8 @@ public class ToolSprite extends Group {
 	public Image bomb;
 	public Button menu;
 	public Image add;
+	public Image succeed;
+	private boolean showSucceed;
 
 	int currentLevel;
 	int targetScore;
@@ -51,6 +56,8 @@ public class ToolSprite extends Group {
 
 		fresh = new BtnSprite(Constants.FRESH_BTN, 0);
 		addActor(fresh);
+
+		succeed = new Image(Assets.instance.effectAtlas.findRegion("succeed"));
 
 		init();
 		score = new Label("" + scoreValue, Assets.instance.numStyle);
@@ -99,6 +106,7 @@ public class ToolSprite extends Group {
 				score.getHeight());
 		tip.setAlignment(Align.center);
 		addActor(tip);
+
 	}
 
 	public void init() {
@@ -107,6 +115,7 @@ public class ToolSprite extends Group {
 		currentLevel = 1;
 		targetScore = 1000;
 		scoreValue = 0;
+		hideSucceed();
 	}
 
 	public void saveState() {
@@ -119,6 +128,7 @@ public class ToolSprite extends Group {
 	}
 
 	public void loadState() {
+		hideSucceed();
 		if (Assets.instance.recordPreference.getBoolean("ifLoad", false)) { // 表示继续之前的游戏
 			currentLevel = Assets.instance.recordPreference.getInteger("level",
 					1);
@@ -137,6 +147,7 @@ public class ToolSprite extends Group {
 	}
 
 	public void restart() {
+		hideSucceed();
 		scoreValue = Assets.instance.lastScore;
 		System.out.println("restart lastscore " + scoreValue);
 		score.setText("" + scoreValue);
@@ -145,6 +156,29 @@ public class ToolSprite extends Group {
 
 	public int getScore() {
 		return scoreValue;
+	}
+
+	private void hideSucceed() {
+		showSucceed = false;
+		succeed.remove();
+	}
+
+	private void showSucceed() {
+		showSucceed = true;
+		succeed.setBounds(0, Constants.width / 2, Constants.width,
+				Constants.width / 2);
+		Action a1 = Actions.scaleTo(0.99f, 0.99f,
+				Gdx.graphics.getDeltaTime() * 2);
+		Action a2 = Actions.scaleTo(1, 1, Gdx.graphics.getDeltaTime() * 2);
+		Action a3 = Actions.repeat(4, Actions.sequence(a1, a2));
+		Action a4 = Actions
+				.scaleTo(0.3f, 0.3f, Gdx.graphics.getDeltaTime() * 8);
+		Action a5 = Actions.moveTo(0, Constants.toolBtnY - Constants.width * 0.15f,
+				Gdx.graphics.getDeltaTime() * 8);
+		succeed.addAction(Actions.sequence(a3, Actions.parallel(a4, a5)));
+		addActor(succeed);
+
+		MusicManager.manager.playSound(MusicManager.SUCCEED);
 	}
 
 	/**
@@ -156,6 +190,9 @@ public class ToolSprite extends Group {
 	public void updateScore(int value) {
 		scoreValue += value;
 		score.setText("" + scoreValue);
+		if (!showSucceed && scoreValue >= targetScore) {
+			showSucceed();
+		}
 	}
 
 	/**
@@ -169,6 +206,10 @@ public class ToolSprite extends Group {
 		tip.setText(removeNum + "连消" + s + "分");
 	}
 
+	public boolean levelUpSucceed() {
+		return scoreValue > targetScore;
+	}
+
 	/**
 	 * 加一关
 	 */
@@ -178,7 +219,7 @@ public class ToolSprite extends Group {
 			best.setText("历史最高分:" + scoreValue);
 		}
 
-		if (scoreValue < targetScore) {
+		if (!levelUpSucceed()) { // 升级失败
 			return false;
 		}
 
@@ -194,6 +235,7 @@ public class ToolSprite extends Group {
 		level.setText("关卡:" + currentLevel);
 		target.setText("目标:" + targetScore);
 		tip.setText("");
+		hideSucceed();
 		return true;
 	}
 

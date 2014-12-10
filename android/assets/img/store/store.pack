@@ -5,21 +5,35 @@ filter: Nearest,Nearest
 repeat: none
 store
   rotate: false
-  xy: 1, 43
+  xy: 1, 145
   size: 344, 300
   orig: 344, 300
   offset: 0, 0
   index: -1
-btn
+btn_off
+  rotate: false
+  xy: 1, 73
+  size: 210, 70
+  orig: 210, 70
+  offset: 0, 0
+  index: -1
+btn_on
   rotate: false
   xy: 1, 1
+  size: 210, 70
+  orig: 210, 70
+  offset: 0, 0
+  index: -1
+btn
+  rotate: false
+  xy: 347, 405
   size: 110, 40
   orig: 110, 40
   offset: 0, 0
   index: -1
 Common_Close
   rotate: false
-  xy: 347, 296
+  xy: 213, 96
   size: 47, 47
   orig: 47, 47
   offset: 0, 0

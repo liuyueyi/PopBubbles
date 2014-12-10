@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.july.popbubbles.Assets;
 import com.july.popbubbles.Constants;
+import com.july.popbubbles.MusicManager;
 
 /**
  * 道具管理器
@@ -49,7 +50,7 @@ public class PropsManager {
 		this.type = type;
 		switch (type) {
 		case Constants.BOMB_BTN:
-			anim = new Animation(0.1f, bombs);
+			anim = new Animation(0.07f, bombs);
 			tool = Assets.instance.effectAtlas.findRegion("bomb", 0);
 			height = Constants.bubbleWidth;
 			width = height * 59 / 67f;
@@ -97,6 +98,7 @@ public class PropsManager {
 		choosed = true;
 
 		if (type == Constants.FRESH_BTN) {
+			MusicManager.manager.playSound(MusicManager.FRESH);
 			acted = true;
 			return;
 		}
@@ -169,8 +171,11 @@ public class PropsManager {
 		batch.begin();
 		if (!acted) {
 			if (time != 0) { // 表示绘制移动过程
-				if (time++ == 10)
+				if (time++ == 10) {
 					acted = true;
+					MusicManager.manager.playSound(type);
+				}
+
 				x += addx;
 				y += addy;
 				width += addWidth;

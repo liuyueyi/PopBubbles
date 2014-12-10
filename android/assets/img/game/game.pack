@@ -5,141 +5,141 @@ filter: Nearest,Nearest
 repeat: none
 bg
   rotate: false
-  xy: 1, 562
+  xy: 1, 596
   size: 267, 427
   orig: 267, 427
   offset: 0, 0
   index: 0
 bg
   rotate: false
-  xy: 1, 133
+  xy: 1, 167
   size: 267, 427
   orig: 267, 427
   offset: 0, 0
   index: 1
 bg
   rotate: false
-  xy: 270, 562
+  xy: 270, 596
   size: 267, 427
   orig: 267, 427
   offset: 0, 0
   index: 2
 bg
   rotate: false
-  xy: 270, 133
+  xy: 270, 167
   size: 267, 427
   orig: 267, 427
   offset: 0, 0
   index: 3
 d
   rotate: false
-  xy: 1, 67
-  size: 64, 64
-  orig: 64, 64
+  xy: 1, 37
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: 0
 d
   rotate: false
-  xy: 539, 925
-  size: 64, 64
-  orig: 64, 64
+  xy: 539, 895
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: 1
 d
   rotate: false
-  xy: 1, 1
-  size: 64, 64
-  orig: 64, 64
+  xy: 131, 37
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: 2
 d
   rotate: false
-  xy: 67, 67
-  size: 64, 64
-  orig: 64, 64
+  xy: 539, 765
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: 3
 d
   rotate: false
-  xy: 539, 859
-  size: 64, 64
-  orig: 64, 64
+  xy: 669, 895
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: 4
 d
   rotate: false
-  xy: 605, 925
-  size: 64, 64
-  orig: 64, 64
+  xy: 261, 37
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: 5
 d
   rotate: false
-  xy: 67, 1
-  size: 64, 64
-  orig: 64, 64
+  xy: 539, 635
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: 6
 d
   rotate: false
-  xy: 133, 67
-  size: 64, 64
-  orig: 64, 64
+  xy: 669, 765
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: 8
 bomb
   rotate: false
-  xy: 539, 800
+  xy: 799, 966
   size: 57, 57
   orig: 57, 57
   offset: 0, 0
   index: -1
 color
   rotate: false
-  xy: 605, 866
+  xy: 391, 108
   size: 57, 57
   orig: 57, 57
   offset: 0, 0
   index: -1
 fresh
   rotate: false
-  xy: 671, 932
+  xy: 539, 576
   size: 57, 57
   orig: 57, 57
   offset: 0, 0
   index: -1
 hammer
   rotate: false
-  xy: 133, 8
+  xy: 669, 706
   size: 57, 57
   orig: 57, 57
   offset: 0, 0
   index: -1
-Main_Life
-  rotate: false
-  xy: 199, 88
-  size: 47, 43
-  orig: 47, 43
-  offset: 0, 0
-  index: -1
-Main_Btn_AddCoin
-  rotate: false
-  xy: 539, 753
-  size: 42, 45
-  orig: 42, 45
-  offset: 0, 0
-  index: -1
 menu
   rotate: false
-  xy: 730, 955
+  xy: 1, 1
   size: 38, 34
   orig: 38, 34
   offset: 0, 0
   index: -1
 menu_off
   rotate: false
-  xy: 248, 97
+  xy: 41, 1
   size: 38, 34
   orig: 38, 34
+  offset: 0, 0
+  index: -1
+Main_Life
+  rotate: false
+  xy: 799, 921
+  size: 47, 43
+  orig: 47, 43
+  offset: 0, 0
+  index: -1
+Main_Btn_AddCoin
+  rotate: false
+  xy: 858, 978
+  size: 42, 45
+  orig: 42, 45
   offset: 0, 0
   index: -1

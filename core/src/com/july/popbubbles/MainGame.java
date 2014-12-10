@@ -5,10 +5,23 @@ import com.badlogic.gdx.Gdx;
 import com.july.popbubbles.sprite.BubbleFactory;
 
 public class MainGame extends Game {
+	BushEvent event;
+
+	public MainGame() {
+
+	}
+
+	public MainGame(BushEvent bushEvent) {
+		// TODO Auto-generated constructor stub
+		this.event = bushEvent;
+	}
 
 	@Override
 	public void create() {
 		Assets.instance.init();
+		MusicManager.manager.loadMusic();
+		MusicManager.manager.loadSound();
+		MusicManager.manager.playMusic();
 		setScreen(new MenuScreen(this));
 	}
 
@@ -17,6 +30,7 @@ public class MainGame extends Game {
 		Gdx.app.log("maigame", "main game exit");
 		Assets.instance.save();
 		Assets.instance.dispose();
+		MusicManager.manager.dispose();
 		BubbleFactory.instance.dispose();
 	}
 }

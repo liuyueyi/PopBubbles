@@ -3,58 +3,65 @@ menu.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+help
+  rotate: false
+  xy: 1, 133
+  size: 512, 850
+  orig: 512, 850
+  offset: 0, 0
+  index: -1
 bg
   rotate: false
-  xy: 1, 191
+  xy: 515, 183
   size: 480, 800
   orig: 480, 800
   offset: 0, 0
   index: -1
 play
   rotate: false
-  xy: 1, 59
+  xy: 1, 1
   size: 182, 130
   orig: 182, 130
   offset: 0, 0
   index: -1
 store
   rotate: false
-  xy: 185, 69
+  xy: 185, 11
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
   index: -1
 Main_Btn_Course
   rotate: false
-  xy: 1, 1
+  xy: 307, 75
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: -1
 Main_Music_Off
   rotate: false
-  xy: 307, 133
+  xy: 307, 17
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: -1
 Main_Music_On
   rotate: false
-  xy: 59, 1
+  xy: 365, 75
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: -1
 Main_Sound_Off
   rotate: false
-  xy: 307, 75
+  xy: 365, 17
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: -1
 Main_Sound_On
   rotate: false
-  xy: 365, 133
+  xy: 423, 75
   size: 56, 56
   orig: 56, 56
   offset: 0, 0

@@ -29,9 +29,9 @@ public class Constants {
 	public final static float resultY = (height - resultHeight) / 2;
 
 	// store constants
-	public final static float storeWidth = 0.8f * width;
+	public final static float storeWidth = 0.96f * width;
 	public final static float storeHeight = storeWidth * 300 / 344;
-	public final static float storeX = resultX;
+	public final static float storeX = storeWidth * 0.02f;
 	public final static float storeY = (height - storeHeight) / 2;
 
 	// btn
@@ -41,11 +41,11 @@ public class Constants {
 	public final static int SOUND_BTN = 3;
 	public final static int STORE_BTN = 4;
 
-	public final static int MENU_BTN = 5;
+	public final static int MENU_BTN = 13;
+	public final static int COLOR_BTN = 5;
 	public final static int FRESH_BTN = 6;
 	public final static int HAMMER_BTN = 7;
 	public final static int BOMB_BTN = 8;
-	public final static int COLOR_BTN = 13;
 	public final static int ADD_BTN = 9;
 
 	public final static int CONTINUE_BTN = 10;
@@ -138,4 +138,7 @@ public class Constants {
 	public final static float honourHeight = 56 * width / 167;
 	public final static float honourX = 0;
 	public final static float honourY = (height - honourHeight) / 2;
+	
+	public final static int EXIT = 0;
+	public final static int CHAPING = 1;
 }

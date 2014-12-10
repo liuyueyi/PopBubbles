@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.july.popbubbles.Assets;
 import com.july.popbubbles.Constants;
 import com.july.popbubbles.GameScreen;
+import com.july.popbubbles.MusicManager;
 
 public class Failure {
 	GameScreen gameScreen;
@@ -63,6 +64,7 @@ public class Failure {
 	EventListener listener = new ClickListener() {
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
+			MusicManager.manager.playSound(MusicManager.BUTTON);
 			if (event.getListenerActor() == restart) { //
 				gameScreen.game.setScreen(new GameScreen(gameScreen.game));
 				gameScreen.dispose();
@@ -86,6 +88,7 @@ public class Failure {
 		time = 8;
 		Gdx.input.setInputProcessor(stage);
 		bg.addAction(Actions.forever(Actions.rotateBy(0.5f)));
+		MusicManager.manager.playSound(MusicManager.GAMEOVER);
 	}
 
 	public void draw(Batch batch) {

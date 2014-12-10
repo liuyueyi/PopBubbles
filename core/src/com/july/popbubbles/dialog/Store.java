@@ -8,39 +8,44 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.july.popbubbles.Assets;
 import com.july.popbubbles.Constants;
+import com.july.popbubbles.MusicManager;
 import com.july.popbubbles.MyScreen;
 
 public class Store {
-	public static Store store = new Store();
+//	public static Store store = new Store();
 	MyScreen screen;
 
 	Stage stage;
-	MyLabel one;
-	MyLabel tow;
-	MyLabel five;
+	MyTextButton one;
+	MyTextButton two;
+	MyTextButton five;
 	Image close;
 	Label heartNum;
-	private LabelStyle style;
+	TextButtonStyle buttonStyle;
 
-	private Store() {
+	public Store() {
 		stage = new Stage();
-		style = new LabelStyle(Assets.instance.tip, Color.BLACK);
-		style.background = Assets.instance.btnDrwa;
+		buttonStyle = new TextButtonStyle(Assets.instance.btnDrwa,
+				Assets.instance.btnDrwaOff, Assets.instance.btnDrwa,
+				Assets.instance.tip);
+		buttonStyle.fontColor = Color.BLUE;
+		buttonStyle.downFontColor = Color.DARK_GRAY;
 
-		one = new MyLabel("гд1");
+		one = new MyTextButton("гд1");
 		one.setY(Constants.storeY + Constants.storeHeight * 0.58f);
 		stage.addActor(one);
 
-		tow = new MyLabel("гд2");
-		tow.setY(Constants.storeY + Constants.storeHeight * 0.38f);
-		stage.addActor(tow);
+		two = new MyTextButton("гд2");
+		two.setY(Constants.storeY + Constants.storeHeight * 0.38f);
+		stage.addActor(two);
 
-		five = new MyLabel("гд5");
+		five = new MyTextButton("гд5");
 		five.setY(Constants.storeY + Constants.storeHeight * 0.16f);
 		stage.addActor(five);
 
@@ -66,24 +71,30 @@ public class Store {
 		public void clicked(InputEvent event, float x, float y) {
 			if (event.getListenerActor() == one) {
 				Gdx.app.log("store", "one yuan");
-			} else if (event.getListenerActor() == tow) {
+			} else if (event.getListenerActor() == two) {
 				Gdx.app.log("store", "one yuan");
 			} else if (event.getListenerActor() == five) {
 				Gdx.app.log("store", "one yuan");
 			} else { // close button clicked
+				MusicManager.manager.playSound(MusicManager.BUTTON);
 				screen.setInputProcessor();
+				return;
 			}
+			MusicManager.manager.playSound(MusicManager.ADDCOIN);
 		}
 	};
 
-	private class MyLabel extends Label {
-		public MyLabel(String text) {
-			super(text, style);
+	private class MyTextButton extends TextButton {
+		public MyTextButton(String text) {
+			super(text, buttonStyle);
 			setSize(0.22f * Constants.storeWidth, 0.1f * Constants.storeHeight);
 			setX(0.66f * Constants.storeWidth + Constants.storeX);
 			addListener(listener);
-			setAlignment(Align.center);
 		}
+	}
+
+	public void updateHeartNum(int num) {
+		heartNum.setText("" + num);
 	}
 
 	public void show(MyScreen screen) {

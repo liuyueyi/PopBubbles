@@ -294,7 +294,7 @@ public class BubbleFactory {
 	/**
 	 * 豆豆被点击后，若存在可以消除的豆豆，则执行本方法，为所有可消灭和可向下移动的豆豆添加动画
 	 */
-	public void autoRemoveBubbles() {
+		public void autoRemoveBubbles() {
 		for (int r = 0; r < 10; r++)
 			for (int c = 0; c < 10; c++) {
 				if (bubbles[r][c] == null)
@@ -312,10 +312,10 @@ public class BubbleFactory {
 					continue;
 				if (bubbles[r][c].tag) { // 记录消除的总个数和当前列的个数
 					bubbles[r][c].waitDuration = wait;
-					wait += 6;
+					wait += 4;
 					count++;
 				} else if (count > 0) { // 添加移动动画，设置等待时间，交换在数组中的位置
-					bubbles[r][c].addMoveDownAction(10, (removeCount) * 6,
+					bubbles[r][c].addMoveDownAction(10, (removeCount) * 4,
 							count);
 					Bubble tmp = bubbles[r - count][c];
 					bubbles[r - count][c] = bubbles[r][c];
@@ -380,8 +380,12 @@ public class BubbleFactory {
 					removeBubble(i, j); // 移除可以消除的豆豆
 				} else
 					bubbles[i][j].draw(batch);
-
 			}
+		}
+
+		if (moveLeftAfterProps) {
+			autoMoveLeft();
+			moveLeftAfterProps = false;
 		}
 		BubbleEffectManager.manager.draw(batch);
 	}
@@ -414,11 +418,6 @@ public class BubbleFactory {
 					bubbles[i][j].rectangle.x, bubbles[i][j].rectangle.y);
 			bubblePools.free(bubbles[i][j]);
 			bubbles[i][j] = null;
-
-			if (moveLeftAfterProps) {
-				autoMoveLeft();
-				moveLeftAfterProps = false;
-			}
 		}
 	}
 

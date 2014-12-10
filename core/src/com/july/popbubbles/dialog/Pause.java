@@ -11,6 +11,7 @@ import com.july.popbubbles.Assets;
 import com.july.popbubbles.Constants;
 import com.july.popbubbles.GameScreen;
 import com.july.popbubbles.MenuScreen;
+import com.july.popbubbles.MusicManager;
 import com.july.popbubbles.sprite.BtnSprite;
 
 public class Pause {
@@ -46,6 +47,7 @@ public class Pause {
 	EventListener listener = new ClickListener() {
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
+			MusicManager.manager.playSound(MusicManager.BUTTON);
 			if (event.getListenerActor() == continueBtn) {
 				gameScreen.setInputProcessor();
 			} else if (event.getListenerActor() == backBtn) { // 返回菜单，要求记录当前状态
