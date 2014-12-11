@@ -26,7 +26,7 @@ public class ToolSprite extends Group {
 	public Image hammer;
 	public Image bomb;
 	public Button menu;
-	public Image add;
+	// public Image add;
 	public Image succeed;
 	private boolean showSucceed;
 
@@ -81,8 +81,8 @@ public class ToolSprite extends Group {
 		target.setAlignment(Align.center);
 		addActor(target);
 
-		add = new BtnSprite(Constants.ADD_BTN, 0);
-		addActor(add);
+		// add = new BtnSprite(Constants.ADD_BTN, 0);
+		// addActor(add);
 
 		star = new Label("" + Assets.instance.heart, Assets.instance.tipStyle);
 		star.setColor(Color.BLACK);
@@ -102,8 +102,12 @@ public class ToolSprite extends Group {
 
 		tip = new Label("", Assets.instance.numStyle);
 		tip.setColor(Color.BLACK);
-		tip.setBounds(0, Constants.width * 1.08f, Constants.width,
-				score.getHeight());
+		tip.setSize(Constants.width, score.getHeight());
+		tip.setPosition(0,
+				(Constants.toolBtnY - Constants.width - tip.getHeight()) / 2
+						+ Constants.width);
+//		tip.setBounds(0, Constants.width * 1.08f, Constants.width,
+//				score.getHeight());
 		tip.setAlignment(Align.center);
 		addActor(tip);
 
@@ -250,7 +254,7 @@ public class ToolSprite extends Group {
 		fresh.addListener(listener);
 		hammer.addListener(listener);
 		color.addListener(listener);
-		add.addListener(listener);
+		// add.addListener(listener);
 		return true;
 	}
 }

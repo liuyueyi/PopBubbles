@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.july.popbubbles.dialog.Failure;
 import com.july.popbubbles.dialog.Pause;
-import com.july.popbubbles.dialog.Store;
+import com.july.popbubbles.sprite.BubbleEffectManager;
 import com.july.popbubbles.sprite.BubbleFactory;
 import com.july.popbubbles.sprite.Honour;
 import com.july.popbubbles.sprite.HonourManager;
@@ -27,7 +27,6 @@ public class GameScreen extends MyScreen {
 	Stage gameStage;
 	SpriteBatch batch;
 
-	Store store;
 	Pause pause;
 	Failure failure;
 	ToolSprite toolSprite;
@@ -39,6 +38,7 @@ public class GameScreen extends MyScreen {
 
 	public GameScreen(MainGame game) {
 		this.game = game;
+		// Gdx.app.setLogLevel(Application.LOG_NONE);
 
 		batch = new SpriteBatch();
 		gameStage = new Stage();
@@ -69,6 +69,7 @@ public class GameScreen extends MyScreen {
 		gameState = Constants.RUN;
 		prideLabel.setText("");
 		BubbleFactory.instance.init();
+		BubbleEffectManager.manager.autoFree();
 	}
 
 	/**
@@ -117,19 +118,18 @@ public class GameScreen extends MyScreen {
 					pause = new Pause(GameScreen.this);
 				gameState = Constants.PAUSE;
 				pause.show();
-			} else if (event.getListenerActor() == toolSprite.add) {
-				if (store == null)
-					store = new Store();
-				gameState = Constants.STORE;
-				store.show(GameScreen.this);
-			} else if (event.getListenerActor() == toolSprite.hammer) {
-				PropsManager.manager.show(Constants.HAMMER_BTN);
-			} else if (event.getListenerActor() == toolSprite.bomb) {
-				PropsManager.manager.show(Constants.BOMB_BTN);
-			} else if (event.getListenerActor() == toolSprite.color) {
-				PropsManager.manager.show(Constants.COLOR_BTN);
-			} else if (event.getListenerActor() == toolSprite.fresh) {
-				PropsManager.manager.show(Constants.FRESH_BTN);
+			} else {
+				if (Assets.instance.heart < 5) // 表示爱心数量不够， 不能使用道具
+					return;
+				if (event.getListenerActor() == toolSprite.hammer) {
+					PropsManager.manager.show(Constants.HAMMER_BTN);
+				} else if (event.getListenerActor() == toolSprite.bomb) {
+					PropsManager.manager.show(Constants.BOMB_BTN);
+				} else if (event.getListenerActor() == toolSprite.color) {
+					PropsManager.manager.show(Constants.COLOR_BTN);
+				} else if (event.getListenerActor() == toolSprite.fresh) {
+					PropsManager.manager.show(Constants.FRESH_BTN);
+				}
 			}
 		}
 	};
@@ -139,9 +139,6 @@ public class GameScreen extends MyScreen {
 	 */
 	@Override
 	public void setInputProcessor() {
-		if (gameState == Constants.STORE) {
-			toolSprite.updateLevel();
-		}
 		Gdx.input.setInputProcessor(mult);
 		gameState = Constants.RUN;
 	}
@@ -166,9 +163,6 @@ public class GameScreen extends MyScreen {
 			return;
 		case Constants.FAILED:
 			failure.draw(batch);
-			return;
-		case Constants.STORE:
-			store.draw(batch);
 			return;
 		case Constants.PROPS:
 			PropsManager.manager.draw(batch, delta);
@@ -255,17 +249,14 @@ public class GameScreen extends MyScreen {
 	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
-		MusicManager.manager.playSound(MusicManager.BUTTON);
+		if (gameState == Constants.PASSED)
+			return false;
 
+		MusicManager.manager.playSound(MusicManager.BUTTON);
 		if (keycode == Keys.BACK || keycode == Keys.A) {
-			// if (gameState == Constants.PAUSE || gameState == Constants.STORE)
-			// {
-			// setInputProcessor();
-			// return false;
-			// }
-			// return to menu
 			if (pause == null)
 				pause = new Pause(GameScreen.this);
+			game.event.notify(gameStage, Constants.CHAPING);
 			gameState = Constants.PAUSE;
 			pause.show();
 		}
@@ -286,10 +277,10 @@ public class GameScreen extends MyScreen {
 		if (gameState == Constants.PROPS
 				&& (PropsManager.manager.type == Constants.FRESH_BTN || BubbleFactory.instance
 						.containBubble(row, column))) {
+			if (Assets.instance.heart < 5)
+				return false;
 			PropsManager.manager.act(row, column);
 			toolSprite.updateHeart();
-			if (store != null)
-				store.updateHeartNum();
 			return true;
 		}
 

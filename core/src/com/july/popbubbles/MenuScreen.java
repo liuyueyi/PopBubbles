@@ -1,5 +1,7 @@
 package com.july.popbubbles;
 
+import java.text.SimpleDateFormat;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
@@ -11,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.july.popbubbles.dialog.Store;
 import com.july.popbubbles.sprite.BtnSprite;
 
 public class MenuScreen extends MyScreen {
@@ -25,8 +26,6 @@ public class MenuScreen extends MyScreen {
 	Image soundBtn;
 	Image storeBtn;
 
-	Store store;
-	
 	boolean showStore;
 	boolean showHelp;
 	TextureRegion help;
@@ -69,19 +68,20 @@ public class MenuScreen extends MyScreen {
 				}
 			} else if (event.getListenerActor() == soundBtn) {
 				if (Assets.instance.soundOn) {
-					System.out.println("sound off");
 					soundBtn.setDrawable(Assets.instance.btn[Constants.SOUND_BTN].btn[1]);
 					MusicManager.manager.stopSound();
 				} else {
-					System.out.println("sound on");
 					soundBtn.setDrawable(Assets.instance.btn[Constants.SOUND_BTN].btn[0]);
 					Assets.instance.soundOn = true;
 				}
 			} else if (event.getListenerActor() == storeBtn) {
-				if(store == null)
-					store = new Store();
-				showStore = true;
-				store.show(MenuScreen.this);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				java.util.Date date = new java.util.Date();
+				String str = sdf.format(date);
+				Assets.instance.setPreference.putString("date", str).flush();
+				Assets.instance.heart += 10;
+				game.event.notify(game, Constants.SIGN);
+				storeBtn.remove();
 			}
 		}
 	};
@@ -116,9 +116,11 @@ public class MenuScreen extends MyScreen {
 		soundBtn.addListener(btnClickListener);
 		stage.addActor(soundBtn);
 
-		storeBtn = new BtnSprite(Constants.STORE_BTN, 0);
-		storeBtn.addListener(btnClickListener);
-		stage.addActor(storeBtn);
+		if (Assets.instance.showSign) {
+			storeBtn = new BtnSprite(Constants.STORE_BTN, 0);
+			storeBtn.addListener(btnClickListener);
+			stage.addActor(storeBtn);
+		}
 	}
 
 	@Override
@@ -132,8 +134,6 @@ public class MenuScreen extends MyScreen {
 
 		stage.draw();
 		stage.act();
-		if (showStore)
-			store.draw(batch);
 
 		if (showHelp) {
 			batch.begin();

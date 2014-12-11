@@ -1,5 +1,8 @@
 package com.july.popbubbles;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
@@ -43,14 +46,32 @@ public class Assets {
 
 	public int heart;
 
+	boolean showSign;
+
 	private Assets() {
 
 	}
 
 	public void init() {
 		recordPreference = Gdx.app.getPreferences("record");
-
 		setPreference = Gdx.app.getPreferences("set");
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");// 小写的mm表示的是分钟
+			String dstr = setPreference.getString("date", "");
+			java.util.Date date = sdf.parse(dstr);
+			java.util.Date nowdate = sdf
+					.parse(sdf.format(new java.util.Date()));
+			if (date.before(nowdate)) {
+				System.out.println("before!");
+				showSign = true;
+			} else
+				showSign = false;
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			showSign = true;
+		}
+
 		heart = setPreference.getInteger("heart", 30);
 		soundOn = setPreference.getBoolean("soundOn", true);
 		musicOn = setPreference.getBoolean("musicOn", true);

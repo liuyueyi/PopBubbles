@@ -64,7 +64,7 @@ public class Constants {
 	public final static float courseBtnY = startBtnY - 0.8f * btnHeight;
 	public final static float musicBtnY = courseBtnY - 1.4f * btnHeight;
 	public final static float soundBtnY = musicBtnY - 1.4f * btnHeight;
-	public final static float toolBtnY = height - 2.9f * btnHeight;
+	public final static float toolBtnY = height - 2.8f * btnHeight - 30;
 	public final static float freshBtnX = width - btnWidth - 5 * wrate;
 	public final static float colorBtnX = freshBtnX - btnWidth - 5 * wrate;
 	public final static float hammerBtnX = colorBtnX - btnWidth - 5 * wrate;
@@ -76,7 +76,7 @@ public class Constants {
 			/ 2;
 
 	public final static float storeBtnWidth = 120 * wrate;
-	public final static float storeBtnHeight = storeBtnWidth;
+	public final static float storeBtnHeight = 64 * hrate;
 	public final static float storeBtnX = width - 1.1f * storeBtnWidth;
 	public final static float storeBtnY = startBtnY + 0.4f * startBtnHeight;
 
@@ -100,10 +100,10 @@ public class Constants {
 	public final static float addWidth = 42 * wrate;
 	public final static float addHeight = 45 * hrate;
 	public final static float addX = width - addWidth;
-	public final static float addY = toolBtnY + btnHeight * 1.2f;
+	public final static float addY = toolBtnY + btnHeight * 1.1f;
 
-	public final static float heartImgWidth = 47 * wrate;
-	public final static float heartImgHeight = addHeight;
+	public final static float heartImgWidth = 40 * wrate;
+	public final static float heartImgHeight = heartImgWidth;
 	public final static float heartImgX = addX - 0.92f * 125 * wrate;
 	public final static float heartImgY = addY;
 
@@ -117,7 +117,7 @@ public class Constants {
 	public final static float targetX = levelX + levelWidth;
 	public final static float targetY = levelY;
 	public final static float bestX = 0;
-	public final static float bestY = height - btnHeight;// + levelHeight;
+	public final static float bestY = height - btnHeight - 30;// + levelHeight;
 	public final static float bestWidth = width;
 	public final static float bestHeight = btnHeight;
 	public final static float scoreX = menuBtnX + menuBtnWidth;
@@ -138,10 +138,10 @@ public class Constants {
 	public final static float honourHeight = 56 * width / 167;
 	public final static float honourX = 0;
 	public final static float honourY = (height - honourHeight) / 2;
-	
+
 	public final static int EXIT = 0;
 	public final static int CHAPING = 1;
-	public final static int PAY1 = 2;
-	public final static int PAY2 = 3;
-	public final static int PAY3 = 4;
+	// public final static int OFFER = 3;
+	public final static int SIGN = 2;
+	public final static int INSTALL = 3;
 }

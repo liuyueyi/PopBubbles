@@ -19,7 +19,7 @@ public class BtnTexture extends GameObject {
 		case Constants.STORE_BTN:
 			rectangle = new Rectangle(Constants.storeBtnX, Constants.storeBtnY,
 					Constants.storeBtnWidth, Constants.storeBtnHeight);
-			btn[0] = new TextureRegionDrawable(atlas.findRegion("store"));
+			btn[0] = new TextureRegionDrawable(atlas.findRegion("sign"));
 			break;
 		case Constants.COURSE_BTN:
 			rectangle = new Rectangle(Constants.btnX, Constants.courseBtnY,

@@ -51,7 +51,7 @@ public class Pause {
 			if (event.getListenerActor() == continueBtn) {
 				gameScreen.setInputProcessor();
 			} else if (event.getListenerActor() == backBtn) { // 返回菜单，要求记录当前状态
-//				gameScreen.saveState();
+				// gameScreen.saveState();
 				gameScreen.game.setScreen(new MenuScreen(gameScreen.game));
 				gameScreen.pause();
 				gameScreen.dispose();
