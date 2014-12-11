@@ -1,13 +1,12 @@
 package com.july.popbubbles.android;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -19,33 +18,18 @@ import com.july.popbubbles.Assets;
 import com.july.popbubbles.BushEvent;
 import com.july.popbubbles.Constants;
 import com.july.popbubbles.MainGame;
-import com.pkag.m.MyMDListner;
-import com.pkag.m.MyMediaManager;
-import com.pmkg.p.Ckm;
 import com.wanpu.pay.PayConnect;
 import com.wanpu.pay.PayResultListener;
 
 public class AndroidLauncher extends AndroidApplication {
 	LinearLayout layout;
-	static String cooID = "486f195baefa4dfaab2a2687455d71b9";
-	static String channelId = "k-sj91";
 	static String appID = "0d73a92e277f705d609fb3a7546437ff";
-	static String appPid = "waps";
-
-//	BannerView bannerView;
+	static String appPid = "91";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initPushAd();
-		initMeidaAd();
-
-		// if (isConnect()) {
-//		bannerView = new BannerView(this);
-//		int width = this.getWindowManager().getDefaultDisplay().getWidth();
-//		layout.addView(bannerView, width, 50);
-//		bannerView.showBanner(cooID, channelId);
-		// }
+		layout = new LinearLayout(this);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		View gameView = initializeForView(new MainGame(event), config);
 		layout.addView(gameView);
@@ -67,10 +51,17 @@ public class AndroidLauncher extends AndroidApplication {
 			// TODO Auto-generated method stub
 			switch (msg.what) {
 			case Constants.EXIT:
-				pm.receiveMessage(mContext, true);
-			case Constants.CHAPING:
-				MyMediaManager.showExitInDialog((Activity) mContext, cooID,
-						channelId);// 如果有广告就显示，显示完后会自动加载下一条广告
+				// 创建退出对话框
+				AlertDialog isExit = new AlertDialog.Builder(mContext).create();
+				// 设置对话框标题
+				isExit.setTitle("系统提示");
+				// 设置对话框消息
+				isExit.setMessage("退出游戏");
+				// 添加选择按钮并注册监听
+				isExit.setButton("残忍离开", listener);
+				isExit.setButton2("再玩一会", listener);
+				// 显示对话框
+				isExit.show();
 				break;
 			case Constants.PAY1:
 				((AndroidLauncher) mContext).pay(1);
@@ -94,77 +85,25 @@ public class AndroidLauncher extends AndroidApplication {
 		}
 	};
 
-	private static Ckm pm;
-
-	private void initPushAd() {
-		layout = new LinearLayout(this);
-		layout.setOrientation(LinearLayout.VERTICAL);
-		pm = Ckm.getInstance(AndroidLauncher.this);
-		// 设置cooId
-		pm.setCooId(AndroidLauncher.this, cooID);//
-		// 设置channelId
-		pm.setChannelId(AndroidLauncher.this, channelId);
-		// 接收push
-		pm.receiveMessage(AndroidLauncher.this, true);
-
-		// if (isConnect())
-		// layout.addView(btn, 200, -2);
-	}
-
-	private void initMeidaAd() {
-		// 提供相应回调接口，可以不调用，建议setListner方法写在load方法前
-		MyMediaManager.setListner(new MyMDListner() {
-			@Override
-			public void onMDShow() {
-			}
-
-			@Override
-			public void onMDClose() {
-			}
-
-			@Override
-			public void onInstanll(int id) {
-			}
-
-			@Override
-			public void onMDLoadSuccess() {
-				// MyMediaManager.showExitOutDialog(AndroidLauncher.this,
-				// MyMediaManager.CENTER_CENTER, cooID, channelId);
-				// MyMediaManager.show(AndroidLauncher.this);
-			}
-
-			@Override
-			public void onMDExitInFinish() {
-				Gdx.app.exit();
-				((Activity) mContext).finish();
-			}
-
-			@Override
-			public void onMDExitOutFinish() {
-			}
-		});
-		MyMediaManager.load(AndroidLauncher.this, cooID, channelId);
-	}
-
 	private static Context mContext;
 
-//	private boolean isConnect() {
-//		try {
-//			ConnectivityManager conn = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//			if (conn != null) {
-//				NetworkInfo info = conn.getActiveNetworkInfo();
-//				if (info != null && info.isConnected()) {
-//					if (info.getState() == NetworkInfo.State.CONNECTED) {
-//						return true;
-//					}
-//				}
-//			}
-//		} catch (Exception e) {
-//			Log.v("error", e.toString());
-//		}
-//		return false;
-//	}
 
+	/** 监听对话框里面的button点击事件 */
+	static DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+			case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
+				Gdx.app.exit();
+				((Activity) mContext).finish();
+				break;
+			case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+				break;
+			default:
+				break;
+			}
+		}
+	};
+	
 	// 应用或游戏商自定义的支付订单(每条支付订单数据不可相同)
 	String orderId = "";
 	// 用户标识

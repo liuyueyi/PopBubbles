@@ -40,3 +40,23 @@
    boolean reportFixture(long);
    float   reportRayFixture(long, float, float, float, float, float);
 }
+
+-keep public interface com.wanpu.pay.** {*;}
+-keep public class com.wanpu.pay.** {*;}
+-keep class com.alipay.android.app.IAlixPay{*;}
+-keep class com.alipay.android.app.IAlixPay$Stub{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
+-keep class com.alipay.sdk.app.PayTask{ public *;}
+-keep class com.alipay.sdk.auth.AlipaySDK{ public *;}
+-keep class com.alipay.sdk.auth.APAuthInfo{ public *;}
+-keep class com.alipay.mobilesecuritysdk.*
+-keep class com.ut.*
+-keep public interface com.payeco.android.plugin.** {*;}
+-keep public class com.payeco.android.plugin.** {*;}
+-keep public interface com.tenpay.android.service.** {*;}
+-keep public class com.tenpay.android.service.** {*;}
+-keep public interface com.unionpay.** {*;}
+-keep public class com.unionpay.** {*;}
+-keep public interface com.UCMobile.** {*;}
+-keep public class com.UCMobile.** {*;}

@@ -69,8 +69,14 @@ public class Failure {
 				gameScreen.game.setScreen(new GameScreen(gameScreen.game));
 				gameScreen.dispose();
 			} else if (event.getListenerActor() == retry) {
-				gameScreen.setInputProcessor();
-				gameScreen.restart();
+				if (Assets.instance.heart > 5) {
+					Assets.instance.heart -= 5;
+					gameScreen.setInputProcessor();
+					gameScreen.restart();
+				} else {
+					gameScreen.game.setScreen(new GameScreen(gameScreen.game));
+					gameScreen.dispose();
+				}
 			}
 		}
 	};
@@ -100,8 +106,14 @@ public class Failure {
 			retry.setText((int) time + "sºó¼ÌÐø");
 			if (time < 1) {
 				show = false;
-				gameScreen.setInputProcessor();
-				gameScreen.restart();
+				if (Assets.instance.heart > 5) {
+					Assets.instance.heart -= 5;
+					gameScreen.setInputProcessor();
+					gameScreen.restart();
+				} else {
+					gameScreen.game.setScreen(new GameScreen(gameScreen.game));
+					gameScreen.dispose();
+				}
 			}
 		}
 		stage.draw();

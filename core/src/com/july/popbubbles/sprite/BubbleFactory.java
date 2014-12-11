@@ -235,6 +235,8 @@ public class BubbleFactory {
 		if (!containBubble(row, column))
 			return false;
 
+		BubbleEffectManager.manager.autoFree();
+
 		// clear score object
 		for (ScoreTip tip : scoreArray) {
 			tip.clear();
@@ -294,7 +296,7 @@ public class BubbleFactory {
 	/**
 	 * 豆豆被点击后，若存在可以消除的豆豆，则执行本方法，为所有可消灭和可向下移动的豆豆添加动画
 	 */
-		public void autoRemoveBubbles() {
+	public void autoRemoveBubbles() {
 		for (int r = 0; r < 10; r++)
 			for (int c = 0; c < 10; c++) {
 				if (bubbles[r][c] == null)

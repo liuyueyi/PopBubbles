@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.july.popbubbles.dialog.Failure;
 import com.july.popbubbles.dialog.Pause;
 import com.july.popbubbles.dialog.Store;
+import com.july.popbubbles.sprite.BubbleEffectManager;
 import com.july.popbubbles.sprite.BubbleFactory;
 import com.july.popbubbles.sprite.Honour;
 import com.july.popbubbles.sprite.HonourManager;
@@ -39,6 +40,7 @@ public class GameScreen extends MyScreen {
 
 	public GameScreen(MainGame game) {
 		this.game = game;
+		// Gdx.app.setLogLevel(Application.LOG_NONE);
 
 		batch = new SpriteBatch();
 		gameStage = new Stage();
@@ -122,14 +124,23 @@ public class GameScreen extends MyScreen {
 					store = new Store();
 				gameState = Constants.STORE;
 				store.show(GameScreen.this);
-			} else if (event.getListenerActor() == toolSprite.hammer) {
-				PropsManager.manager.show(Constants.HAMMER_BTN);
-			} else if (event.getListenerActor() == toolSprite.bomb) {
-				PropsManager.manager.show(Constants.BOMB_BTN);
-			} else if (event.getListenerActor() == toolSprite.color) {
-				PropsManager.manager.show(Constants.COLOR_BTN);
-			} else if (event.getListenerActor() == toolSprite.fresh) {
-				PropsManager.manager.show(Constants.FRESH_BTN);
+			} else {
+				if (Assets.instance.heart < 5) {
+					if (store == null)
+						store = new Store();
+					gameState = Constants.STORE;
+					store.show(GameScreen.this);
+					return;
+				}
+				if (event.getListenerActor() == toolSprite.hammer) {
+					PropsManager.manager.show(Constants.HAMMER_BTN);
+				} else if (event.getListenerActor() == toolSprite.bomb) {
+					PropsManager.manager.show(Constants.BOMB_BTN);
+				} else if (event.getListenerActor() == toolSprite.color) {
+					PropsManager.manager.show(Constants.COLOR_BTN);
+				} else if (event.getListenerActor() == toolSprite.fresh) {
+					PropsManager.manager.show(Constants.FRESH_BTN);
+				}
 			}
 		}
 	};
@@ -200,6 +211,7 @@ public class GameScreen extends MyScreen {
 				time += 20;
 		} else if (gameState == Constants.PASSED && time > 0) {
 			if (--time == 0) {
+				BubbleEffectManager.manager.autoFree();
 				if (toolSprite.updateLevel()) { // ³É¹¦
 					init();
 				} else { // Ê§°Ü

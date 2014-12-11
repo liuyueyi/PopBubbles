@@ -152,6 +152,7 @@ public class ToolSprite extends Group {
 		System.out.println("restart lastscore " + scoreValue);
 		score.setText("" + scoreValue);
 		tip.setText("");
+		updateHeart();
 	}
 
 	public int getScore() {
