@@ -18,7 +18,7 @@ import com.july.popbubbles.MusicManager;
 import com.july.popbubbles.MyScreen;
 
 public class Store {
-//	public static Store store = new Store();
+	// public static Store store = new Store();
 	MyScreen screen;
 
 	Stage stage;
@@ -57,7 +57,7 @@ public class Store {
 		close.addListener(listener);
 		stage.addActor(close);
 
-		heartNum = new Label("100", Assets.instance.tipStyle);
+		heartNum = new Label("" + Assets.instance.heart, Assets.instance.tipStyle);
 		heartNum.setColor(Color.BLUE);
 		heartNum.setAlignment(Align.center);
 		heartNum.setWidth(Constants.width);
@@ -70,11 +70,11 @@ public class Store {
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
 			if (event.getListenerActor() == one) {
-				Gdx.app.log("store", "one yuan");
+				screen.game.event.notify(screen.game, Constants.PAY1);
 			} else if (event.getListenerActor() == two) {
-				Gdx.app.log("store", "one yuan");
+				screen.game.event.notify(screen.game, Constants.PAY2);
 			} else if (event.getListenerActor() == five) {
-				Gdx.app.log("store", "one yuan");
+				screen.game.event.notify(screen.game, Constants.PAY3);
 			} else { // close button clicked
 				MusicManager.manager.playSound(MusicManager.BUTTON);
 				screen.setInputProcessor();
@@ -93,8 +93,8 @@ public class Store {
 		}
 	}
 
-	public void updateHeartNum(int num) {
-		heartNum.setText("" + num);
+	public void updateHeartNum() {
+		heartNum.setText("" + Assets.instance.heart);
 	}
 
 	public void show(MyScreen screen) {

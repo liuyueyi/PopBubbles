@@ -21,7 +21,6 @@ import com.july.popbubbles.sprite.ScoreTip;
 import com.july.popbubbles.sprite.ToolSprite;
 
 public class GameScreen extends MyScreen {
-	public MainGame game;
 	int gameState;// ÓÎÏ·×´Ì¬
 
 	InputMultiplexer mult;
@@ -119,7 +118,7 @@ public class GameScreen extends MyScreen {
 				gameState = Constants.PAUSE;
 				pause.show();
 			} else if (event.getListenerActor() == toolSprite.add) {
-				if(store == null)
+				if (store == null)
 					store = new Store();
 				gameState = Constants.STORE;
 				store.show(GameScreen.this);
@@ -140,6 +139,9 @@ public class GameScreen extends MyScreen {
 	 */
 	@Override
 	public void setInputProcessor() {
+		if (gameState == Constants.STORE) {
+			toolSprite.updateLevel();
+		}
 		Gdx.input.setInputProcessor(mult);
 		gameState = Constants.RUN;
 	}
@@ -256,10 +258,11 @@ public class GameScreen extends MyScreen {
 		MusicManager.manager.playSound(MusicManager.BUTTON);
 
 		if (keycode == Keys.BACK || keycode == Keys.A) {
-//			if (gameState == Constants.PAUSE || gameState == Constants.STORE) {
-//				setInputProcessor();
-//				return false;
-//			}
+			// if (gameState == Constants.PAUSE || gameState == Constants.STORE)
+			// {
+			// setInputProcessor();
+			// return false;
+			// }
 			// return to menu
 			if (pause == null)
 				pause = new Pause(GameScreen.this);
@@ -284,6 +287,9 @@ public class GameScreen extends MyScreen {
 				&& (PropsManager.manager.type == Constants.FRESH_BTN || BubbleFactory.instance
 						.containBubble(row, column))) {
 			PropsManager.manager.act(row, column);
+			toolSprite.updateHeart();
+			if (store != null)
+				store.updateHeartNum();
 			return true;
 		}
 

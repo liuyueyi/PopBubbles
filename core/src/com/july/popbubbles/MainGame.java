@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.july.popbubbles.sprite.BubbleFactory;
 
 public class MainGame extends Game {
-	BushEvent event;
+	public BushEvent event;
 
 	public MainGame() {
 

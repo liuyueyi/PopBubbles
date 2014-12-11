@@ -41,6 +41,8 @@ public class Assets {
 	public int bestScore;
 	public int lastScore;
 
+	public int heart;
+
 	private Assets() {
 
 	}
@@ -49,6 +51,7 @@ public class Assets {
 		recordPreference = Gdx.app.getPreferences("record");
 
 		setPreference = Gdx.app.getPreferences("set");
+		heart = setPreference.getInteger("heart", 30);
 		soundOn = setPreference.getBoolean("soundOn", true);
 		musicOn = setPreference.getBoolean("musicOn", true);
 		Gdx.app.log("wzb", "asset soundon : " + soundOn + " music on "
@@ -145,6 +148,7 @@ public class Assets {
 	public void save() {
 		setPreference.putBoolean("musicOn", musicOn).flush();
 		setPreference.putBoolean("soundOn", soundOn).flush();
+		setPreference.putInteger("heart", heart).flush();
 		setPreference.putInteger("best", bestScore).flush();
 		setPreference.putInteger("last", lastScore).flush();
 		System.out.println("save last score: " + lastScore);

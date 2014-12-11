@@ -97,6 +97,7 @@ public class PropsManager {
 			return;
 		choosed = true;
 
+		Assets.instance.heart -= 5; // ¿Û³ý5¸ö°®ÐÄ
 		if (type == Constants.FRESH_BTN) {
 			MusicManager.manager.playSound(MusicManager.FRESH);
 			acted = true;

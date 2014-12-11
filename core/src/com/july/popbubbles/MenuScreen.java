@@ -15,8 +15,6 @@ import com.july.popbubbles.dialog.Store;
 import com.july.popbubbles.sprite.BtnSprite;
 
 public class MenuScreen extends MyScreen {
-	MainGame game;
-
 	SpriteBatch batch;
 	Stage stage;
 	InputMultiplexer mul;

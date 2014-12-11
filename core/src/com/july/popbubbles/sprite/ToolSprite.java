@@ -84,7 +84,7 @@ public class ToolSprite extends Group {
 		add = new BtnSprite(Constants.ADD_BTN, 0);
 		addActor(add);
 
-		star = new Label("1000", Assets.instance.tipStyle);
+		star = new Label("" + Assets.instance.heart, Assets.instance.tipStyle);
 		star.setColor(Color.BLACK);
 		star.setPosition(Constants.heartImgX + Constants.heartImgWidth,
 				Constants.heartImgY);
@@ -173,8 +173,8 @@ public class ToolSprite extends Group {
 		Action a3 = Actions.repeat(4, Actions.sequence(a1, a2));
 		Action a4 = Actions
 				.scaleTo(0.3f, 0.3f, Gdx.graphics.getDeltaTime() * 8);
-		Action a5 = Actions.moveTo(0, Constants.toolBtnY - Constants.width * 0.15f,
-				Gdx.graphics.getDeltaTime() * 8);
+		Action a5 = Actions.moveTo(0, Constants.toolBtnY - Constants.width
+				* 0.15f, Gdx.graphics.getDeltaTime() * 8);
 		succeed.addAction(Actions.sequence(a3, Actions.parallel(a4, a5)));
 		addActor(succeed);
 
@@ -237,6 +237,10 @@ public class ToolSprite extends Group {
 		tip.setText("");
 		hideSucceed();
 		return true;
+	}
+
+	public void updateHeart() {
+		star.setText("" + Assets.instance.heart);
 	}
 
 	@Override

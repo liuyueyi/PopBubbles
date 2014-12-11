@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 
 public class MyScreen extends ScreenAdapter implements InputProcessor {
+	public MainGame game;
 
 	public void setInputProcessor() {
 

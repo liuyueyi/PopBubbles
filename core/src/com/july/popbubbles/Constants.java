@@ -141,4 +141,7 @@ public class Constants {
 	
 	public final static int EXIT = 0;
 	public final static int CHAPING = 1;
+	public final static int PAY1 = 2;
+	public final static int PAY2 = 3;
+	public final static int PAY3 = 4;
 }
